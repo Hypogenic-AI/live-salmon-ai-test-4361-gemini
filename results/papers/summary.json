@@ -1,0 +1,18 @@
+{
+    "standard_semantic": {
+        "paper_path": "results/papers/standard_semantic_paper.txt",
+        "true_formula": "F = m * a"
+    },
+    "standard_anonymous": {
+        "paper_path": "results/papers/standard_anonymous_paper.txt",
+        "true_formula": "y = x1 * x2"
+    },
+    "counterfactual_semantic": {
+        "paper_path": "results/papers/counterfactual_semantic_paper.txt",
+        "true_formula": "F = m * a^2"
+    },
+    "counterfactual_anonymous": {
+        "paper_path": "results/papers/counterfactual_anonymous_paper.txt",
+        "true_formula": "y = x1 * (x2^2)"
+    }
+}

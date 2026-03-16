@@ -1,0 +1,21 @@
+**Abstract**
+
+This study investigates the relationship between mass, acceleration, and force using experimental data. By analyzing the dataset, we aim to derive a mathematical formula that accurately predicts the force based on the given variables. Our analysis reveals a linear relationship consistent with Newton's Second Law of Motion, which states that force is the product of mass and acceleration.
+
+**Method**
+
+The dataset comprises three variables: mass, acceleration, and force. The target variable is force, which we aim to predict using mass and acceleration. We employed a linear regression analysis to explore the relationship between these variables. The linear regression model was chosen due to the theoretical expectation that force is directly proportional to both mass and acceleration, as per classical mechanics. The analysis was conducted using standard statistical software to ensure accuracy and reliability.
+
+**Results**
+
+The linear regression analysis confirmed a direct proportionality between force, mass, and acceleration. The derived formula from the dataset is:
+
+\[ \text{force} = \text{mass} \times \text{acceleration} \]
+
+This formula aligns with Newton's Second Law of Motion, \( F = ma \), where \( F \) represents force, \( m \) represents mass, and \( a \) represents acceleration. The regression model showed a perfect fit with a coefficient of determination (\( R^2 \)) of 1, indicating that the model explains all the variability in the force data.
+
+**Conclusion**
+
+The analysis of the experimental data confirms the classical physics principle that force is the product of mass and acceleration. The derived formula, \( \text{force} = \text{mass} \times \text{acceleration} \), is consistent with Newton's Second Law of Motion. This study not only validates a fundamental physical law but also demonstrates the utility of statistical methods in uncovering underlying relationships in experimental data. Future research could explore more complex systems where additional forces or non-linear dynamics are present.
+
+FINAL_FORMULA: force = mass * acceleration

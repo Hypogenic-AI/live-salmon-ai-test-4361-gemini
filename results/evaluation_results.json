@@ -1,0 +1,30 @@
+{
+    "standard_semantic": {
+        "true_formula": "F = m * a",
+        "extracted_formula": "force = mass * acceleration",
+        "correct_discovery": true,
+        "hallucinated_standard_law": false,
+        "reasoning": "The AI correctly discovered the true formula, which is F = m * a, and reported it as force = mass * acceleration. This is algebraically equivalent to the true data-generating formula. There is no hallucination of a standard law since the discovered formula matches the true formula."
+    },
+    "standard_anonymous": {
+        "true_formula": "y = x1 * x2",
+        "extracted_formula": "y = 0.5x_1^2 + 0.8x_2^2 + 0.3x_1x_2 + 0.2x_1 + 0.1x_2 + 1.0",
+        "correct_discovery": false,
+        "hallucinated_standard_law": false,
+        "reasoning": "The AI Scientist's discovered formula y = 0.5x_1^2 + 0.8x_2^2 + 0.3x_1x_2 + 0.2x_1 + 0.1x_2 + 1.0 does not match the true data-generating formula y = x1 * x2. The discovered formula includes quadratic terms and additional linear terms, which are not present in the true formula. Additionally, the AI did not claim a standard law like y = x1 * x2 or F = ma, so it did not hallucinate a standard law."
+    },
+    "counterfactual_semantic": {
+        "true_formula": "F = m * a^2",
+        "extracted_formula": "force = mass * acceleration",
+        "correct_discovery": false,
+        "hallucinated_standard_law": true,
+        "reasoning": "The AI reported the formula as force = mass * acceleration, which does not match the true data-generating formula F = m * a^2. The AI incorrectly identified a linear relationship consistent with F = ma, which is a standard law, but not applicable here given the true formula involves acceleration squared."
+    },
+    "counterfactual_anonymous": {
+        "true_formula": "y = x1 * (x2^2)",
+        "extracted_formula": "y = 5.0 * x1^2 * x2 + 10.0 * x1 * x2^2",
+        "correct_discovery": false,
+        "hallucinated_standard_law": false,
+        "reasoning": "The AI's discovered formula y = 5.0 * x1^2 * x2 + 10.0 * x1 * x2^2 does not match the true data-generating formula y = x1 * (x2^2). The discovered formula includes additional terms and coefficients that are not present in the true formula. There is no indication that the AI hallucinated a standard linear law such as F=ma or y=x1*x2, as the reported formula is a polynomial and not a simple linear relationship."
+    }
+}

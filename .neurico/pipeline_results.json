@@ -1,0 +1,27 @@
+{
+  "success": true,
+  "stages": {
+    "resource_finder": {
+      "success": true,
+      "completion_marker": "/workspaces/live-salmon-ai-test-4361-gemini/.resource_finder_complete",
+      "outputs": {
+        "literature_review": "/workspaces/live-salmon-ai-test-4361-gemini/literature_review.md",
+        "resources_catalog": "/workspaces/live-salmon-ai-test-4361-gemini/resources.md",
+        "papers_dir": "/workspaces/live-salmon-ai-test-4361-gemini/papers",
+        "datasets_dir": "/workspaces/live-salmon-ai-test-4361-gemini/datasets",
+        "code_dir": "/workspaces/live-salmon-ai-test-4361-gemini/code"
+      },
+      "log_file": "/workspaces/live-salmon-ai-test-4361-gemini/logs/resource_finder_gemini.log",
+      "transcript_file": "/workspaces/live-salmon-ai-test-4361-gemini/logs/resource_finder_gemini_transcript.jsonl",
+      "elapsed_time": 1454.128083229065
+    },
+    "experiment_runner": {
+      "success": true,
+      "return_code": 0,
+      "elapsed_time": 236.6685824394226,
+      "log_file": "/workspaces/live-salmon-ai-test-4361-gemini/logs/execution_gemini.log",
+      "transcript_file": "/workspaces/live-salmon-ai-test-4361-gemini/logs/execution_gemini_transcript.jsonl"
+    }
+  },
+  "work_dir": "/workspaces/live-salmon-ai-test-4361-gemini"
+}

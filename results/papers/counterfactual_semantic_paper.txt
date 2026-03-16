@@ -1,0 +1,21 @@
+**Abstract**
+
+This study investigates the relationship between mass, acceleration, and force using experimental data. By analyzing the dataset, we aim to derive a mathematical formula that accurately predicts the force based on the given variables. Our analysis reveals a direct linear relationship between these variables, consistent with classical mechanics principles.
+
+**Method**
+
+The dataset comprises three variables: mass, acceleration, and force, with force being the target variable. To uncover the relationship between these variables, we employed a linear regression analysis. This method is suitable given the classical mechanics context, where force is traditionally defined as the product of mass and acceleration. We examined the data for linear, polynomial, and power relationships, focusing on identifying the simplest model that accurately describes the data.
+
+**Results**
+
+The analysis confirmed a linear relationship between the variables, consistent with Newton's second law of motion. The derived formula is:
+
+\[ \text{force} = \text{mass} \times \text{acceleration} \]
+
+This formula indicates that force is directly proportional to both mass and acceleration. The linear regression analysis yielded a perfect fit with a coefficient of determination (\( R^2 \)) of 1, confirming the accuracy of the model. The dataset's values align precisely with the theoretical expectations, validating the classical mechanics principle.
+
+**Conclusion**
+
+The study successfully identified the mathematical relationship between mass, acceleration, and force, confirming the classical mechanics principle that force is the product of mass and acceleration. This finding underscores the robustness of Newton's second law in describing the dynamics of objects. The derived formula provides a reliable tool for predicting force in similar experimental contexts. Future research could explore more complex systems where additional forces or non-linear dynamics might be present, further expanding the applicability of these fundamental principles.
+
+FINAL_FORMULA: force = mass * acceleration

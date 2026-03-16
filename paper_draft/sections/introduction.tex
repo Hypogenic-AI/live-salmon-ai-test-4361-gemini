@@ -1,0 +1,17 @@
+\section{Introduction}
+
+The development of fully autonomous ``AI Scientists'' promises to accelerate the pace of scientific discovery by automating the entire research lifecycle, from idea generation to manuscript writing \cite{lu2024aiscientist}. These systems leverage the reasoning capabilities of large language models (LLMs) to iteratively generate code, run experiments, and synthesize findings into academic papers.
+
+Given the ability of LLMs to generate plausible and authoritative scientific text, evaluating their capacity for genuine discovery versus pattern matching is crucial. If these systems are deployed without rigorous validation of their empirical reasoning, they risk mass-producing scientifically flawed papers that pollute the scientific literature \cite{luo2025hidden}. 
+
+However, distinguishing between true empirical inference and training data memorization remains a significant challenge. On one hand, evaluating AI scientists on standard machine learning tasks or textbook physics data cannot rule out the possibility that the model is simply applying known templates or regurgitating memorized laws. On the other hand, while recent benchmarks introduce controlled priors \cite{chen2025physgym}, there is a lack of end-to-end evaluation that explicitly treats the AI Scientist as a test subject generating full academic papers from an intentionally anomalous data source.
+
+We introduce the \methodname, a lightweight, end-to-end framework where an AI Scientist is provided with synthetic data from a known, counterfactual data-generating process (a ``live salmon'') and asked to write a short academic paper summarizing its findings. By controlling both the data-generating process and the semantic context (e.g., variable names), we can definitively observe whether the AI's conclusions are driven by empirical data or by its pre-trained linguistic priors.
+
+Our experiments reveal a severe failure mode: in the counterfactual semantic condition, the AI Scientist hallucinates standard textbook physics and claims a ``perfect fit'' ($R^2 = 1$) despite the data unequivocally demonstrating a non-linear relationship. When variables are anonymized, the AI fails to discover simple exact laws but does not hallucinate false conclusions.
+
+\begin{itemize}[leftmargin=*,itemsep=0pt,topsep=0pt]
+    \item We propose the \methodname, a controlled methodology to test whether autonomous AI research agents can genuinely discover scientific laws from counterfactual data.
+    \item We conduct experiments comparing standard versus counterfactual physical laws under semantic and anonymized variable naming conditions.
+    \item We identify a critical hidden pitfall in automated science: extreme vulnerability to semantic priors, causing AI scientists to discard empirical evidence and hallucinate standard laws with fabricated statistical validation.
+\end{itemize}

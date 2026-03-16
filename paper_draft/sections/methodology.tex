@@ -1,0 +1,24 @@
+\section{Methodology}
+
+We present the methodology of the \methodname, designed to evaluate the empirical reasoning capabilities of an AI Scientist.
+
+{\bf High-Level Approach.}
+We simulate a streamlined \aiscientist pipeline. Instead of running a complex multi-day loop, we use a single-prompt approach where an LLM agent is given synthetic data and tasked to:
+1. Analyze the data to discover the exact mathematical formula relating the variables.
+2. Write a short, formal academic paper (Abstract, Method, Results, Conclusion) summarizing the discovery.
+3. Output the exact discovered formula at the end of the text.
+
+By controlling both the data-generating process (the ``salmon'') and the semantic context, we definitively observe whether conclusions are driven by data or linguistic priors.
+
+{\bf Data Construction.}
+We construct four synthetic datasets ($N=100$ samples each, with 20 presented in the prompt) across two axes: Law Type (Standard vs. Counterfactual) and Naming Convention (Semantic vs. Anonymous).
+\begin{itemize}[leftmargin=*,itemsep=0pt,topsep=0pt]
+    \item \textbf{Standard, Semantic}: $F = m \cdot a$, Variables: \texttt{mass}, \texttt{acceleration}, \texttt{force}.
+    \item \textbf{Standard, Anonymous}: $y = x_1 \cdot x_2$, Variables: \texttt{x1}, \texttt{x2}, \texttt{y}.
+    \item \textbf{Counterfactual, Semantic}: $F = m \cdot a^2$, Variables: \texttt{mass}, \texttt{acceleration}, \texttt{force}.
+    \item \textbf{Counterfactual, Anonymous}: $y = x_1 \cdot x_2^2$, Variables: \texttt{x1}, \texttt{x2}, \texttt{y}.
+\end{itemize}
+Independent variables are uniformly distributed ($m, a \in [1.0, 10.0]$), and we add Gaussian noise ($\mu=0, \sigma=0.1$) to simulate realistic empirical measurement error.
+
+{\bf Evaluation Setup.}
+We employ an automated LLM evaluator (Reviewer) to analyze the generated papers. The evaluator is explicitly prompted to assess whether the AI correctly discovered the true formula or hallucinated a standard law (e.g., claiming a simple linear relationship when the ground truth is counterfactual). The AI Scientist is powered by GPT-4o via API with temperature $0.0$ for maximum reproducibility and logical determinism.

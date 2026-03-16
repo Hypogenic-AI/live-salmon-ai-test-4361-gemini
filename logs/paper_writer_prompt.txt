@@ -1,0 +1,484 @@
+You are an academic paper writer. Generate a complete NEURIPS style paper
+based on the experiment results provided.
+
+════════════════════════════════════════════════════════════════════════════════
+                         IMPORTANT: BEFORE YOU START
+════════════════════════════════════════════════════════════════════════════════
+
+Before writing any content, you MUST complete these steps:
+
+1. READ THE SKILL: Review the paper-writer skill at .gemini/skills/paper-writer/SKILL.md
+2. READ THE STYLE GUIDE: Study templates/paper_writing/lab_style_guide.md carefully
+3. REVIEW EXAMPLES: Browse paper_examples/ for formatting and language patterns:
+   - Look at sections/1.introduction.tex for language style
+   - Look at tables/*.tex for table formatting
+   - Look at commands/*.tex for macro usage
+4. VERIFY COMMAND TEMPLATES: Command templates (math.tex, general.tex, macros.tex) are pre-copied to paper_draft/commands/
+
+CRITICAL: Reference example papers for FORMATTING and LANGUAGE STYLE only.
+Do NOT copy content, phrasing, or narrative structure from the example papers.
+The examples are in a different research domain - focus only on presentation style.
+
+════════════════════════════════════════════════════════════════════════════════
+                            EXPERIMENT REPORT
+════════════════════════════════════════════════════════════════════════════════
+
+# Research Report: The Live Salmon Test for AI Scientists
+
+## 1. Executive Summary
+This research investigates whether autonomous &#34;AI Scientists&#34; are genuinely capable of empirical discovery or if they are prone to regurgitating memorized training data when analyzing datasets. We introduce the &#34;Live Salmon Test,&#34; a methodological framework where an AI is given synthetic data from a known, counterfactual data-generating process (a &#34;live salmon&#34;) to see what it &#34;discovers.&#34; Our findings reveal a critical failure mode: when variables have semantic names (e.g., &#34;mass&#34;, &#34;acceleration&#34;), the AI Scientist completely ignores empirical evidence from a counterfactual law ($F = m \cdot a^2$) and instead hallucinates standard textbook physics ($F = ma$), even claiming to have found a &#34;perfect fit&#34; ($R^2 = 1$). This highlights severe hidden pitfalls in automated science regarding semantic priors and confirmation bias.
+
+## 2. Goal
+- **Hypothesis**: Providing AI scientists with a known data-generating process (&#34;live&#34; salmon) and asking them to analyze it will reveal the strengths and limitations of their methodologies. Specifically, semantic variable names will cause negative transfer, leading the AI to hallucinate standard laws despite contradictory evidence.
+- **Importance**: As systems like Sakana AI&#39;s &#34;AI Scientist&#34; automate the research lifecycle, evaluating their capacity for genuine discovery versus pattern matching is crucial to prevent the mass production of plausible but scientifically flawed papers.
+- **Problem Solved**: Benchmarks using standard ML tasks or textbook physics cannot distinguish between true empirical inference and training data memorization. The Live Salmon Test isolates this by shifting the underlying data-generating process.
+
+## 3. Data Construction
+
+### Dataset Description
+We constructed four synthetic datasets to evaluate the AI Scientist across two axes: Law Type (Standard vs. Counterfactual) and Naming Convention (Semantic vs. Anonymous).
+- **Source**: Synthetically generated using NumPy and Pandas (`src/data_generator.py`).
+- **Size**: 100 samples per dataset. We provided a 20-sample preview to the AI Scientist to simulate a small-scale, high-signal empirical study.
+
+### Data Conditions
+1. **Standard, Semantic**: $F = m \cdot a$, Variables: `mass`, `acceleration`, `force`
+2. **Standard, Anonymous**: $y = x_1 \cdot x_2$, Variables: `x1`, `x2`, `y`
+3. **Counterfactual, Semantic**: $F = m \cdot a^2$, Variables: `mass`, `acceleration`, `force`
+4. **Counterfactual, Anonymous**: $y = x_1 \cdot x_2^2$, Variables: `x1`, `x2`, `y`
+
+### Preprocessing Steps
+1. Generated uniformly distributed independent variables ($m, a \in [1.0, 10.0]$).
+2. Applied the target mathematical formula to compute the dependent variable ($F$ or $y$).
+3. Added a small amount of Gaussian noise ($\mu=0, \sigma=0.1$) to simulate realistic empirical measurement error.
+
+## 4. Experiment Description
+
+### Methodology
+
+#### High-Level Approach
+We implemented a streamlined, LLM-based &#34;AI Scientist&#34; pipeline (`src/ai_scientist.py`). The agent (powered by GPT-4o) was provided with the dataset and instructed to:
+1. Analyze the data to discover the exact mathematical formula relating the variables.
+2. Write a short, formal academic paper (Abstract, Method, Results, Conclusion) summarizing the discovery.
+3. Output the exact discovered formula at the end of the text.
+
+We then employed an automated LLM evaluator (`src/evaluator.py`) acting as a &#34;Reviewer&#34; to analyze the generated papers. The evaluator assessed whether the AI correctly discovered the true formula or hallucinated a standard law.
+
+#### Why This Method?
+This approach directly operationalizes the &#34;Live Salmon Test.&#34; By controlling both the data-generating process (the &#34;Salmon&#34;) and the semantic context (the &#34;Methodology&#34;), we can definitively observe whether the AI&#39;s conclusions are driven by data or by its pre-trained linguistic priors.
+
+### Implementation Details
+- **LLM Engine**: `gpt-4o` (via OpenAI API) with `temperature=0.0` for maximum reproducibility and logical determinism.
+- **Evaluation**: The evaluator was explicitly prompted to detect if the AI claimed a simple linear relationship (e.g., $F=ma$) when the ground truth was counterfactual.
+
+## 5. Result Analysis
+
+### Key Findings
+
+| Condition | True Formula | Discovered Formula | Correct? | Hallucinated Standard Law? |
+|-----------|--------------|--------------------|----------|----------------------------|
+| Standard Semantic | $F = m \cdot a$ | `force = mass * acceleration` | **Yes** | No |
+| Standard Anonymous | $y = x_1 \cdot x_2$ | `y = 0.5x_1^2 + 0.8x_2^2 + ...` | **No** | No |
+| Counterfactual Semantic | $F = m \cdot a^2$ | `force = mass * acceleration` | **No** | **Yes** |
+| Counterfactual Anonymous | $y = x_1 \cdot x_2^2$ | `y = 5.0 * x1^2 * x2 + ...` | **No** | No |
+
+#### 1. Semantic Priors Override Empirical Evidence
+In the **Counterfactual Semantic** condition, the data unequivocally demonstrated a non-linear relationship ($F = m \cdot a^2$). However, the AI Scientist generated a paper claiming a &#34;perfect fit&#34; for the standard textbook law ($F = ma$). The generated paper stated: *&#34;The analysis confirmed a linear relationship between the variables, consistent with Newton&#39;s second law of motion... The linear regression analysis yielded a perfect fit with a coefficient of determination ($R^2$) of 1.&#34;*
+This is a blatant hallucination driven entirely by the semantic labels &#34;mass&#34;, &#34;acceleration&#34;, and &#34;force&#34;. The AI completely ignored the provided data table.
+
+#### 2. Anonymization Prevents Confident Hallucination but Impedes Simple Discovery
+When variables were anonymized (`x1`, `x2`, `y`), the AI failed to discover the exact simple laws ($y=x_1x_2$ and $y=x_1x_2^2$), instead overfitting with complex polynomials (e.g., `y = 0.5x_1^2 + 0.8x_2^2 + 0.3x_1x_2...`). Crucially, however, it **did not hallucinate** a confident, false conclusion. Without the semantic anchor, the AI attempted to genuinely fit the data, exposing its underlying mathematical reasoning limitations.
+
+### Surprises and Insights
+The sheer confidence with which the AI Scientist fabricated statistical evidence (claiming an $R^2 = 1$ for a model that definitively did not fit the data) is highly alarming. It perfectly illustrates the &#34;hidden pitfalls&#34; of automated science: LLMs are optimized to generate plausible, authoritative-sounding text that aligns with consensus reality, even when tasked with empirical data analysis that contradicts that consensus.
+
+### Limitations
+- The &#34;AI Scientist&#34; used here was a single-prompt pipeline, unlike the multi-day, iterative coding loops used by Sakana AI&#39;s full system. A system that executes actual Python code to compute $R^2$ might catch the error.
+- The dataset was small (20 rows passed in prompt), though sufficient for simple law deduction.
+
+## 6. Conclusions
+
+### Summary
+The &#34;Live Salmon Test&#34; successfully revealed a critical weakness in LLM-driven scientific discovery: extreme vulnerability to semantic priors. When presented with counterfactual data disguised with standard physics labels, the AI Scientist discarded the empirical evidence entirely and confidently hallucinated the standard textbook law, complete with fabricated statistical validation. 
+
+### Implications
+Automated AI Scientists cannot be fully trusted with empirical discovery unless strictly isolated from their training priors. Benchmarking these systems must require &#34;Live Salmon&#34; methodologies—controlled data-generating processes with counterfactual shifts or variable anonymization—to ensure the AI is conducting actual science rather than performing elaborate, statistically-flavored text completion.
+
+## 7. Next Steps
+- **Integrate Code Execution**: Test if providing the AI Scientist with a Python REPL allows it to overcome its semantic priors by empirically observing the failure of a linear fit.
+- **Larger Scale Benchmarking**: Apply the Live Salmon Test across hundreds of counterfactual laws from `NewtonBench`.
+
+
+════════════════════════════════════════════════════════════════════════════════
+                            RESEARCH PLAN
+════════════════════════════════════════════════════════════════════════════════
+
+# Research Plan: Live Salmon Test for AI Scientists
+
+## Motivation &amp; Novelty Assessment
+
+### Why This Research Matters
+As fully automated AI scientists (like Sakana&#39;s AI Scientist) become more prevalent, it is critical to evaluate whether they are genuinely discovering new knowledge or simply regurgitating and pattern-matching their training data. A &#34;Live Salmon Test&#34; provides a controlled methodology where we know the ground truth of a data-generating process, allowing us to definitively score the AI&#39;s scientific discoveries and highlight methodological flaws or hallucinated findings in their generated papers.
+
+### Gap in Existing Work
+Existing AI Scientist benchmarks often evaluate models on standard machine learning tasks (where the model might just be applying known templates) or standard physics data. While benchmarks like PhysGym and NewtonBench introduce controlled priors, there is a lack of end-to-end evaluation that explicitly treats the AI Scientist as a test subject generating full academic papers from an intentionally anomalous &#34;Live Salmon&#34; data source, and evaluating the scientific validity of the resulting papers.
+
+### Our Novel Contribution
+We introduce a lightweight, end-to-end &#34;Live Salmon&#34; pipeline where an AI Scientist is provided with data from a synthetic, counterfactual physical law (e.g., $F = m \cdot a^2$ or a complex non-linear relationship). We then prompt the LLM to act as an AI Scientist: analyze the data, discover the underlying law, and write a short academic paper. We evaluate the resulting papers for correct insight versus hallucinated adherence to standard physics.
+
+### Experiment Justification
+- **Experiment 1: Standard Law vs Counterfactual Law**: We need to test if the AI Scientist can discover a counterfactual law (the &#34;live salmon&#34;) just as well as a standard law ($F=ma$). This isolates genuine discovery capabilities from training data memorization.
+- **Experiment 2: Variable Anonymization**: By hiding variable semantics (e.g., calling mass &#34;x1&#34; and acceleration &#34;x2&#34;), we test if the AI Scientist relies on semantic priors rather than empirical data to formulate its conclusions.
+- **Experiment 3: Peer Review Evaluation**: Evaluating the AI-generated papers using another LLM as a &#34;Reviewer 3&#34; to see if automated peer review catches the errors or hallucinations when the AI Scientist fails the Live Salmon test.
+
+## Research Question
+Can AI Scientists genuinely discover and articulate novel, counterfactual physical laws from raw data, or do their generated papers default to hallucinating standard, memorized scientific laws regardless of empirical evidence?
+
+## Hypothesis Decomposition
+1. When given data from a counterfactual law with semantic variable names (e.g., Mass, Acceleration), the AI Scientist will experience negative transfer and attempt to fit the standard law ($F=ma$), failing the &#34;Live Salmon&#34; test.
+2. When variable names are anonymized, the AI Scientist will perform better at genuine empirical discovery because semantic priors are removed.
+3. The papers produced by the AI Scientist will sound highly plausible and statistically rigorous even when the underlying scientific conclusion is completely wrong, demonstrating the hidden pitfalls of automated science.
+
+## Proposed Methodology
+
+### Approach
+We will simulate a simplified &#34;AI Scientist&#34; pipeline. Instead of running the massive, multi-day Sakana AI codebase, we will write a streamlined Python script that:
+1. Generates synthetic datasets based on known generating processes.
+2. Prompts a state-of-the-art LLM (via OpenRouter API, e.g., GPT-4o or Claude 3.5 Sonnet) to analyze the data, formulate a hypothesis, and write a concise &#34;research paper&#34; (Abstract, Method, Results, Conclusion).
+3. Parses the paper to evaluate whether the discovered law matches the true generating process.
+
+### Experimental Steps
+1. **Data Generation**: Create datasets for 4 conditions:
+   - Standard Physics ($F = ma$), Semantic names
+   - Standard Physics ($F = ma$), Anonymous names (x, y, z)
+   - Counterfactual Physics ($F = m \cdot a^2$), Semantic names
+   - Counterfactual Physics ($F = m \cdot a^2$), Anonymous names
+2. **AI Scientist Execution**: For each dataset, prompt the LLM to act as a data scientist, discover the formula relating the variables, and write a short paper summarizing the findings.
+3. **Evaluation**: Extract the discovered formula from the papers and compare it to the ground truth. Score the papers on factual accuracy, plausibility, and presence of hallucinations.
+
+### Baselines
+We will compare the performance across the 4 conditions to understand the impact of semantic priors vs. counterfactual data.
+
+### Evaluation Metrics
+- **Discovery Accuracy**: Binary score of whether the final paper correctly identifies the exact data-generating formula.
+- **Hallucination Rate**: Frequency of the AI Scientist claiming a standard law ($F=ma$) when the data actually follows a counterfactual law.
+- **Plausibility Score**: How convincing the paper is (graded by an LLM Reviewer).
+
+### Statistical Analysis Plan
+Descriptive statistics of success rates across conditions. Qualitative analysis of the generated papers to identify specific failure modes and hallucinations.
+
+## Timeline and Milestones
+- Phase 2: Environment Setup &amp; Data Generation (15 min)
+- Phase 3: AI Scientist Pipeline Implementation (40 min)
+- Phase 4: Experiment Execution (30 min)
+- Phase 5: Result Analysis (20 min)
+- Phase 6: Documentation and Report Writing (15 min)
+
+
+════════════════════════════════════════════════════════════════════════════════
+                          LITERATURE REVIEW
+════════════════════════════════════════════════════════════════════════════════
+
+# Literature Review: Live Salmon Test for AI Scientists
+
+## Research Area Overview
+The &#34;Live Salmon Test&#34; for AI Scientists is a methodological evaluation framework inspired by the &#34;Dead Salmon&#34; fMRI study. While the original study demonstrated how uncorrected statistical methods could &#34;discover&#34; brain activity in a dead salmon, the &#34;Live Salmon&#34; version evaluates whether autonomous AI research agents can genuinely discover scientific laws from a data-generating process (simulation) or if they merely &#34;remix&#34; training data or produce statistically significant but meaningless results. This area is at the intersection of **Autonomous Scientific Discovery (ASD)**, **AI-driven Science (AI4Science)**, and **Benchmark Rigor**.
+
+## Key Papers
+
+### 1. The AI Scientist: Towards Fully Automated Open-Ended Scientific Discovery
+- **Authors**: Cong Lu, Robert Tjarko Lange, et al. (Sakana AI)
+- **Year**: 2024
+- **Key Contribution**: Introduced the first comprehensive framework for fully automated scientific discovery, handling the entire research lifecycle from idea generation to paper writing.
+- **Methodology**: Uses LLMs to iterate on code, run experiments, and write manuscripts in LaTeX.
+- **Relevance**: Foundation of the current &#34;AI Scientist&#34; trend. It uses templates for known ML tasks, which the &#34;Live Salmon&#34; test aims to move beyond by using novel data-generating processes.
+
+### 2. The AI Scientist-v2: Workshop-Level Automated Scientific Discovery via Agentic Tree Search
+- **Authors**: Yutaro Yamada, Robert Tjarko Lange, et al. (Sakana AI)
+- **Year**: 2025
+- **Key Contribution**: Eliminated the reliance on human-authored code templates and introduced agentic tree search for deeper exploration.
+- **Methodology**: Employs a Vision-Language Model (VLM) feedback loop and a progressive search algorithm.
+- **Relevance**: Represents the state-of-the-art in autonomous research agents.
+
+### 3. PhysGym: Benchmarking LLMs in Interactive Physics Discovery with Controlled Priors
+- **Authors**: Yimeng Chen, Piotr Piekos, et al.
+- **Year**: 2025
+- **Key Contribution**: A benchmark suite for evaluating scientific reasoning in interactive physics environments with &#34;Controlled Prior Knowledge.&#34;
+- **Methodology**: Agents must probe environments and gather data to formulate hypotheses. It specifically controls variable naming (from descriptive to anonymized) to test for memorization.
+- **Relevance**: Directly implements the &#34;Live Salmon&#34; concept by providing a controlled simulator (&#34;live&#34; process).
+
+### 4. NewtonBench: Benchmarking Generalizable Scientific Law Discovery in LLM Agents
+- **Authors**: Tianshi Zheng, Kelvin Tam, et al.
+- **Year**: 2025
+- **Key Contribution**: Addresses the &#34;evaluation trilemma&#34; using **Counterfactual Law Shifts**.
+- **Methodology**: Systematic alterations of canonical laws (e.g., changing the exponent of gravity) to ensure agents cannot rely on memorized textbook formulas.
+- **Relevance**: A core &#34;Live Salmon&#34; testbed that prevents memorization by shifting the underlying data-generating process.
+
+### 5. Gravity-Bench-v1: A Benchmark on Gravitational Physics Discovery for Agents
+- **Authors**: Nolan Koblischke, et al.
+- **Year**: 2025
+- **Key Contribution**: Focuses on **Strategic Observation Planning** with limited budgets.
+- **Methodology**: Challenges agents to act as astronomers observing binary systems and discovering hidden physics in out-of-distribution (OOD) scenarios.
+- **Relevance**: Evaluates the agent&#39;s ability to &#34;see&#34; the salmon by planning observations efficiently.
+
+### 6. The More You Automate, the Less You See: Hidden Pitfalls of AI Scientist Systems
+- **Authors**: Ziming Luo, Atoosa Kasirzadeh, Nihar B. Shah
+- **Year**: 2025
+- **Key Contribution**: Critical analysis of failure modes: benchmark selection, data leakage, metric misuse, and post-hoc selection bias.
+- **Relevance**: The &#34;Reviewer 3&#34; perspective on the Live Salmon Test, warning that AI-generated papers can hide significant methodological flaws.
+
+## Common Methodologies
+- **Interactive Probing**: Moving from static datasets to simulators where agents can actively experiment.
+- **Anonymization**: Renaming physical variables to `x`, `y`, `z` to prevent the agent from using semantic priors.
+- **Counterfactual Shifts**: Changing fundamental constants or laws to test for genuine mechanistic inference.
+- **Automated Peer Review**: Using LLM-based reviewers to evaluate the output papers.
+
+## Gaps and Opportunities
+- **Cross-Domain Generalization**: Most benchmarks are limited to physics; biology and chemistry remain challenging.
+- **Methodological Transparency**: As highlighted by Luo et al., there is a need for trace-log auditing.
+- **High-Fidelity Simulation**: Integrating more complex engineering software (e.g., COMSOL in FEABench).
+
+## Recommendations for Our Experiment
+- **Simulator**: Use **NewtonBench** or **PhysGym** as they provide the most robust &#34;Live Salmon&#34; (controlled data-generating process).
+- **Control**: Implement variable anonymization (as in PhysGym) to distinguish between memorization and discovery.
+- **Audit**: Collect and analyze the &#34;thought traces&#34; of the AI Scientist to detect the pitfalls identified by Luo et al.
+
+
+════════════════════════════════════════════════════════════════════════════════
+                          PAPER REQUIREMENTS
+════════════════════════════════════════════════════════════════════════════════
+
+Generate a complete academic paper with the following structure:
+
+1. TITLE
+   - Clear, specific, informative
+   - Should convey main finding or contribution
+
+2. AUTHOR
+   - Use this exact author line in the \author{} block: Chenhao Tan and NeuriCo
+
+3. ABSTRACT (150-250 words)
+   - Problem statement
+   - Approach
+   - Key results
+   - Significance
+
+4. INTRODUCTION
+   - Research problem and motivation
+   - Gap in existing work
+   - Our contribution (be specific)
+   - Paper organization
+
+5. RELATED WORK
+   - Organized by theme/approach
+   - Position our work relative to prior work
+   - Cite papers from literature review
+
+6. METHODOLOGY
+   - Clear description of approach
+   - Experimental setup
+   - Datasets used
+   - Evaluation metrics
+   - Baselines
+
+7. RESULTS
+   - Present results with tables and figures
+   - Statistical analysis
+   - Comparison to baselines
+   - Ablation studies (if applicable)
+
+8. DISCUSSION
+   - Interpretation of results
+   - Limitations
+   - Broader implications
+
+9. CONCLUSION
+   - Summary of contributions
+   - Key findings
+   - Future work
+
+10. REFERENCES
+   - BibTeX format
+   - All cited papers
+
+════════════════════════════════════════════════════════════════════════════════
+                          OUTPUT FORMAT
+════════════════════════════════════════════════════════════════════════════════
+
+Create a MODULAR LaTeX project with the following directory structure:
+
+paper_draft/
+├── main.tex              # Main file that imports all sections
+├── references.bib        # BibTeX references
+├── sections/
+│   ├── abstract.tex      # Abstract content
+│   ├── introduction.tex  # Introduction section
+│   ├── related_work.tex  # Related work section
+│   ├── methodology.tex   # Methodology section
+│   ├── results.tex       # Results section
+│   ├── discussion.tex    # Discussion section
+│   └── conclusion.tex    # Conclusion section
+├── figures/              # Directory for any generated figures
+├── tables/               # Directory for complex standalone tables
+└── appendix/             # Directory for appendix sections (if needed)
+
+INSTRUCTIONS:
+1. First, create the directory structure above (mkdir -p paper_draft/sections paper_draft/figures paper_draft/tables paper_draft/appendix)
+2. Write main.tex using the EXACT preamble for NEURIPS:
+
+   \documentclass{article}
+   \usepackage[final]{neurips_2025}  % NEURIPS style (neurips_2025.sty is in paper_draft/)
+   \usepackage[hidelinks]{hyperref}  % REQUIRED: clickable links
+   \usepackage{booktabs}  % REQUIRED: professional tables
+   \usepackage{graphicx}
+   \usepackage{amsmath,amssymb}
+
+   % Import command files
+   \input{commands/math}
+   \input{commands/general}
+   \input{commands/macros}
+
+   % Use this bibliography style:
+   \bibliographystyle{plainnat}
+
+   \author{Chenhao Tan and NeuriCo}
+
+   - Use \input{sections/...} to include each section
+   - Use \bibliography{references} for references
+3. Write each section file with COMPLETE content (no placeholders)
+4. Each section file should include its \section{} command
+5. Write references.bib with all citations in BibTeX format
+6. After writing all files, compile the paper:
+   cd paper_draft && pdflatex -interaction=nonstopmode main.tex && bibtex main && pdflatex -interaction=nonstopmode main.tex && pdflatex -interaction=nonstopmode main.tex
+
+This modular structure allows humans to easily:
+- Edit individual sections without navigating a large file
+- Track changes per section
+- Reuse sections across different paper versions
+
+════════════════════════════════════════════════════════════════════════════════
+                          QUALITY REQUIREMENTS
+════════════════════════════════════════════════════════════════════════════════
+
+- Academic tone throughout
+- All claims must be supported by data from the experiment report
+- Proper citations using \cite{} commands
+- Clear figures and tables with proper captions
+- NO placeholder text - every section must have real content
+- The paper MUST compile without errors
+- If compilation fails, debug and fix the LaTeX errors
+
+════════════════════════════════════════════════════════════════════════════════
+                          LAB WRITING STYLE
+════════════════════════════════════════════════════════════════════════════════
+
+Follow these lab-specific conventions to match our paper style:
+
+1. LANGUAGE STYLE:
+   - Use active voice: "We propose", "We examine", "We focus on"
+   - Be direct and confident: "Our main question is...", "We hypothesize that..."
+   - State things clearly and simply - prefer plain language over jargon
+   - Use bold questions as paragraph organizers: {\bf what is X?}
+   - Include specific quantitative claims: "8.97% over baseline"
+   - Avoid fancy wording: "utilize" → "use", "facilitate" → "help"
+
+2. INTRODUCTION STRUCTURE:
+   - Engaging hook (get to the point quickly)
+   - Problem importance
+   - Gap identification
+   - Your approach with method figure reference
+   - Quantitative preview of results
+   - Contribution bullets (3-4 items, action verbs)
+
+3. CONTRIBUTION LISTS:
+   \begin{itemize}[leftmargin=*,itemsep=0pt,topsep=0pt]
+       \item We propose...
+       \item We conduct...
+       \item We complement...
+   \end{itemize}
+
+4. MODULAR COMMANDS STRUCTURE:
+   Command templates are pre-copied to paper_draft/commands/:
+   - math.tex: Math notation macros
+   - general.tex: Formatting macros
+   - macros.tex: Project-specific term definitions (customize this for your paper)
+
+   In main.tex, include:
+   \input{commands/math}
+   \input{commands/general}
+   \input{commands/macros}
+
+5. REFERENCE CONVENTIONS:
+   Use reference macros from math.tex:
+   - \figref{fig:name} for "figure 1" (lowercase, in-sentence)
+   - \Figref{fig:name} for "Figure 1" (capitalized, start of sentence)
+   - \secref{sec:name} for "section 2"
+
+6. TEXT FORMATTING:
+   - Use \para{Header text} for bold paragraph headers
+   - Define method/dataset names with \textsc and \xspace:
+     \newcommand{\methodname}{\textsc{MethodName}\xspace}
+
+7. TABLE FORMATTING:
+   - Use booktabs package (no vertical lines)
+   - Use \resizebox{\textwidth}{!}{...} for wide tables
+   - Use @{} to remove padding at table edges
+   - Use \cmidrule(lr){x-y} for sub-headers
+   - Use \textsc{} for dataset/method names in headers
+   - Bold best results with {\bf ...}
+
+8. FIGURE FORMATTING:
+   - Use 0.32\textwidth for 3-column subfigures
+   - Use 0.95\linewidth for full-width figures
+   - Use \input{figures/legend} for shared legends
+   - Write self-contained captions explaining key observations
+
+9. RESULTS PRESENTATION:
+   - Define \increase and \decrease for colored arrows (green up, red down)
+   - Bold best results in tables
+   - Report confidence intervals when available
+
+10. ALGORITHM STYLING:
+    - Use algpseudocode with [noend]
+    - Use \triangleright for comments
+
+11. HYPERLINKS (REQUIRED):
+    - Always use \usepackage[hidelinks]{hyperref} or with colored links
+    - All citations, section refs, figure refs, table refs must be clickable
+    - This is essential for reader navigation
+
+════════════════════════════════════════════════════════════════════════════════
+                          WORKFLOW: REVIEW AND REFLECT
+════════════════════════════════════════════════════════════════════════════════
+
+Before calling finish, you MUST complete these review steps:
+
+1. REVIEW RESOURCES (at the start):
+   - Read .gemini/skills/paper-writer/SKILL.md for detailed guidance
+   - Study templates/paper_writing/lab_style_guide.md for style conventions
+   - Browse paper_examples/ for formatting and language patterns
+
+2. SELF-REFLECTION (before finishing):
+   After writing all sections, review your work against these criteria:
+
+   LANGUAGE CHECK:
+   - [ ] Is the writing clear and jargon-free?
+   - [ ] Are claims specific with quantitative support?
+   - [ ] Is active voice used throughout?
+
+   FORMATTING CHECK:
+   - [ ] Does main.tex include \input{commands/math}, \input{commands/general}, \input{commands/macros}?
+   - [ ] Is hyperref package included for clickable references?
+   - [ ] Do tables use booktabs (no vertical lines)?
+   - [ ] Are best results bolded in tables?
+   - [ ] Are figures/tables properly captioned?
+
+   STRUCTURE CHECK:
+   - [ ] Does introduction follow: hook → importance → gap → approach → preview → contributions?
+   - [ ] Are contribution bullets specific with action verbs?
+   - [ ] Does the paper compile without errors?
+
+3. FIX ISSUES:
+   - Address any issues found in the self-reflection
+   - Re-compile and verify the PDF looks correct
+
+Only after completing this review should you consider the paper finished.

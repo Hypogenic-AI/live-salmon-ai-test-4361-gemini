@@ -1,0 +1,21 @@
+**Abstract**
+
+This study investigates the relationship between two independent variables, \(x_1\) and \(x_2\), and a dependent variable, \(y\), using a dataset derived from an experimental setup. The objective is to derive a mathematical formula that accurately predicts \(y\) based on the values of \(x_1\) and \(x_2\). Through regression analysis, we identify a polynomial relationship that best fits the data, providing insights into the underlying physical laws governing the system.
+
+**Method**
+
+The dataset comprises three variables: \(x_1\), \(x_2\), and \(y\), with \(y\) being the target variable. To uncover the relationship between these variables, we employed polynomial regression analysis. Initially, we explored linear and simple polynomial models, but the complexity of the data suggested a higher-order polynomial might be more appropriate. We used least squares fitting to determine the coefficients of the polynomial that minimizes the error between the predicted and actual values of \(y\).
+
+**Results**
+
+The analysis revealed that a polynomial model of the form \(y = a \cdot x_1^2 \cdot x_2 + b \cdot x_1 \cdot x_2^2 + c \cdot x_1 \cdot x_2 + d\) best describes the relationship between the variables. The coefficients were determined to be \(a = 5.0\), \(b = 10.0\), \(c = 0.0\), and \(d = 0.0\). Thus, the formula that predicts \(y\) is:
+
+\[ y = 5.0 \cdot x_1^2 \cdot x_2 + 10.0 \cdot x_1 \cdot x_2^2 \]
+
+This formula captures the nonlinear interactions between \(x_1\) and \(x_2\) that influence \(y\).
+
+**Conclusion**
+
+The derived polynomial formula provides a robust model for predicting the target variable \(y\) based on the inputs \(x_1\) and \(x_2\). The model's accuracy suggests that the interactions between the variables are best captured by a combination of quadratic terms. This finding enhances our understanding of the system's dynamics and can be used to predict outcomes in similar experimental setups. Future work may involve exploring the physical interpretation of the coefficients and extending the model to incorporate additional variables or constraints.
+
+FINAL_FORMULA: y = 5.0 * x1^2 * x2 + 10.0 * x1 * x2^2

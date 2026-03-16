@@ -1,0 +1,30 @@
+\section{Results}
+
+We evaluate the \aiscientist across the four conditions to determine its capability for genuine discovery versus memorization. 
+
+{\bf Main Results.}
+We summarize the findings in Table \ref{tab:main_results}. The AI Scientist only succeeds in discovering the correct law in the Standard Semantic condition.
+
+\begin{table}[h]
+\centering
+\caption{Discovery results across the four experimental conditions. The AI Scientist fails to discover the counterfactual laws, but crucially, it hallucinates a standard law only when semantic priors are present.}
+\resizebox{0.95\textwidth}{!}{%
+\begin{tabular}{@{}llccc@{}}
+\toprule
+\textbf{Condition} & \textbf{True Formula} & \textbf{Discovered Formula} & \textbf{Correct?} & \textbf{Hallucinated Standard Law?} \\
+\midrule
+Standard Semantic & $F = m \cdot a$ & \texttt{force = mass * acceleration} & \textbf{Yes} & No \\
+Standard Anonymous & $y = x_1 \cdot x_2$ & \texttt{y = 0.5x\_1\textasciicircum 2 + 0.8x\_2\textasciicircum 2 + ...} & No & No \\
+Counterfactual Semantic & $F = m \cdot a^2$ & \texttt{force = mass * acceleration} & No & \textbf{Yes} \\
+Counterfactual Anonymous & $y = x_1 \cdot x_2^2$ & \texttt{y = 5.0 * x1\textasciicircum 2 * x2 + ...} & No & No \\
+\bottomrule
+\end{tabular}
+}
+\label{tab:main_results}
+\end{table}
+
+{\bf Semantic Priors Override Empirical Evidence.}
+In the Counterfactual Semantic condition, the data unequivocally demonstrates a non-linear relationship ($F = m \cdot a^2$). However, the \aiscientist completely ignores the provided data table. It generates a paper claiming a ``perfect fit'' for the standard textbook law ($F = ma$). The generated paper boldly states: \textit{``The analysis confirmed a linear relationship between the variables, consistent with Newton's second law of motion... The linear regression analysis yielded a perfect fit with a coefficient of determination ($R^2$) of 1.''} This represents a blatant hallucination driven entirely by the semantic labels ``mass'', ``acceleration'', and ``force''.
+
+{\bf Anonymization Prevents Confident Hallucination.}
+When variables are anonymized (\texttt{x1}, \texttt{x2}, \texttt{y}), the AI fails to discover the exact simple laws, instead overfitting with complex polynomials (e.g., \texttt{y = 0.5x\_1\textasciicircum 2 + ...}). Crucially, however, it does not hallucinate a confident, false conclusion. Without the semantic anchor, the AI attempts to genuinely fit the data, exposing its underlying mathematical reasoning limitations without fabricating false scientific consensus.

@@ -1,0 +1,9 @@
+\section{Discussion}
+
+Our findings highlight a critical vulnerability in LLM-driven scientific discovery. The sheer confidence with which the AI Scientist fabricated statistical evidence---claiming an $R^2 = 1$ for a model that definitively did not fit the data---is highly alarming. It perfectly illustrates the hidden pitfalls of automated science \cite{luo2025hidden}: LLMs are optimized to generate plausible, authoritative-sounding text that aligns with consensus reality, even when tasked with empirical data analysis that explicitly contradicts that consensus.
+
+{\bf Limitations.}
+Our study has a few limitations. First, the \aiscientist used here is a single-prompt pipeline, unlike the multi-day, iterative coding loops used by full systems like Sakana AI's framework \cite{lu2024aiscientist}. A system that executes actual Python code to compute $R^2$ might catch the error empirically. Second, the dataset provided in the prompt was relatively small (20 rows), though this should be sufficient for simple law deduction.
+
+{\bf Broader Implications.}
+The \methodname demonstrates that AI Scientists cannot be fully trusted with empirical discovery unless strictly isolated from their training priors. Benchmarking these systems must require controlled data-generating processes with counterfactual shifts or variable anonymization \cite{zheng2025newtonbench, chen2025physgym} to ensure the AI is conducting actual science rather than performing elaborate text completion.

@@ -1,0 +1,21 @@
+**Abstract**
+
+This study investigates the relationship between two independent variables, \(x_1\) and \(x_2\), and a dependent variable, \(y\), using a dataset derived from an experimental setup. The objective is to derive a mathematical formula that accurately predicts \(y\) based on \(x_1\) and \(x_2\). Through regression analysis, we identify a polynomial relationship that best fits the data, providing insights into the underlying physical laws governing the system.
+
+**Method**
+
+The dataset comprises three variables: \(x_1\), \(x_2\), and \(y\), with \(y\) being the target variable. We employed polynomial regression analysis to explore potential relationships between the variables. Initially, linear regression was considered, but the residuals indicated a non-linear pattern. Consequently, polynomial regression was applied, testing various degrees to find the best fit. The model's performance was evaluated using the coefficient of determination (\(R^2\)) and residual analysis to ensure the adequacy of the fit.
+
+**Results**
+
+The analysis revealed that a quadratic polynomial model provides the best fit for the data. The discovered formula is:
+
+\[ y = 0.5x_1^2 + 0.8x_2^2 + 0.3x_1x_2 + 0.2x_1 + 0.1x_2 + 1.0 \]
+
+This formula captures the non-linear interactions between \(x_1\) and \(x_2\) and their individual contributions to \(y\). The model achieved a high \(R^2\) value, indicating a strong correlation between the predicted and actual values of \(y\).
+
+**Conclusion**
+
+The study successfully identified a quadratic polynomial relationship between the independent variables \(x_1\) and \(x_2\) and the dependent variable \(y\). The derived formula provides a robust predictive model for \(y\), highlighting the significance of both individual and interactive effects of \(x_1\) and \(x_2\). This finding enhances our understanding of the system's dynamics and can be utilized for further experimental designs and theoretical explorations. Future work may involve exploring higher-order interactions or incorporating additional variables to refine the model further.
+
+FINAL_FORMULA: y = 0.5x_1^2 + 0.8x_2^2 + 0.3x_1x_2 + 0.2x_1 + 0.1x_2 + 1.0
